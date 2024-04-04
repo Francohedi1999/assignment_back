@@ -7,14 +7,14 @@ const User_Model = require("../models/User.model") ;
 const BASE_URL = process.env.BASE_URL ;
 
 
-create_user = async ( req , res , next ) => 
+create_user = async ( req , res ) => 
 {
     try
     {
         const user = await User_Model.findOne({ email: req.body.email }) ;
         if( user )
         {
-            return res.status(200).json( { message: "Cet utilisateur existe déjà" , user , created : false } ) ;
+            return res.status(200).json( { message: "Cet utilisateur existe déjà" , created : false } ) ;
         }
 
         if ( !req.files || Object.keys(req.files).length === 0 ) 
@@ -35,10 +35,10 @@ create_user = async ( req , res , next ) =>
             password : password_ ,
             img_url : file_url ,
             role : req.body.role ,
-            niveau_id : req.body.niveau_id ,
+            niveau : req.body.niveau || "",
         } ) ;
-    
-        return res.status(200).json( { message: "L'utilisateur a été bien ajoutée" , user: new_user , created : true  } ) ;
+
+        return res.status(200).json( { message: "L'utilisateur a été bien ajoutée" , created : true  } ) ;
 
     } 
     catch( error )
@@ -52,5 +52,17 @@ create_user = async ( req , res , next ) =>
     }
 } ;
 
+get_all_utilisateur = async ( req , res ) =>
+{
+    try
+    {
+        const users = await User_Model.find() ;
+        return res.status(200).json( users ) ;
+    }
+    catch (error) 
+    {
+        return res.status(400).json( { message: error } )
+    } 
+} ;
 
-module.exports = { create_user }
+module.exports = { create_user , get_all_utilisateur }
