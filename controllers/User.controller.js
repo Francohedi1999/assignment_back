@@ -56,8 +56,14 @@ get_all_utilisateur = async ( req , res ) =>
 {
     try
     {
-        const users = await User_Model.find() ;
-        return res.status(200).json( users ) ;
+        const role_filtre = req.query.filtre_role ;
+        if( !role_filtre )
+        {            
+            const users = await User_Model.find() ;
+            return res.status(200).json( users ) ;
+        }
+        const users_filtred = await User_Model.find( { role: role_filtre} ) ;
+        return res.status(200).json( users_filtred ) ;
     }
     catch (error) 
     {
@@ -65,4 +71,50 @@ get_all_utilisateur = async ( req , res ) =>
     } 
 } ;
 
-module.exports = { create_user , get_all_utilisateur }
+get_utilisateur_by_id = async ( req , res ) =>
+{
+    try
+    {  
+        const id_utilisateur = req.params.id ;
+        const utilisateur = await User_Model.findById( id_utilisateur ) ;
+                
+        return res.status(200).json( utilisateur ) ;
+    } 
+    catch( error )
+    {
+        return res.status(400).json( error ) ; 
+    }
+}
+
+update_user_by_id = async ( req , res ) =>
+{
+    try
+    {  
+        const id_utilisateur = req.params.id ;
+        const utilisateur = await User_Model.findById( id_utilisateur ) ;
+
+        if( !utilisateur )
+        {
+            return res.status(200).json( { message: "Utilisateur non trouvé" , updated: false } ) ;
+        }
+
+        const update = {
+            nom: req.body.nom ,
+            prenom: req.body.prenom ,
+            email: req.body.email ,
+            niveau: req.body.niveau || "" ,
+            role: req.body.role ,
+            img_url: req.body.img_url ,
+        }
+
+        await User_Model.findOneAndUpdate( { _id: id_utilisateur } , update , { new: true } );
+                
+        return res.status(200).json( { message: "Utilisateur non trouvé" , updated: true} ) ;
+    } 
+    catch( error )
+    {
+        return res.status(400).json( error ) ; 
+    }
+}
+
+module.exports = { create_user , get_all_utilisateur , get_utilisateur_by_id , update_user_by_id }
