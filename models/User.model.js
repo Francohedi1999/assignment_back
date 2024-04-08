@@ -8,7 +8,8 @@ const user_model = mongoose.Schema({
     password : { type: String , required: true } ,
     img_url : { type: String , required: true } ,
     role : { type: String , required: true } ,
-    niveau : { type: String , required: false } 
+    niveau : { type: String , required: false } ,
+    deleted : { type: Boolean , required: true } ,
 
 });
  

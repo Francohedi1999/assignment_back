@@ -36,6 +36,7 @@ create_user = async ( req , res ) =>
             img_url : file_url ,
             role : req.body.role ,
             niveau : req.body.niveau || "",
+            deleted : false ,
         } ) ;
 
         return res.status(200).json( { message: "L'utilisateur a été bien ajoutée" , created : true  } ) ;
@@ -90,6 +91,55 @@ update_user_by_id = async ( req , res ) =>
 {
     try
     {  
+        const id_utilisateur = req.body._id ;
+        const utilisateur = await User_Model.findById( id_utilisateur ) ;
+
+        if( !utilisateur )
+        {
+            return res.status(200).json( { message: "Utilisateur non trouvé" , updated: false } ) ;
+        }
+        
+        if ( !req.files || Object.keys(req.files).length === 0 ) 
+        {
+            const update = {
+                nom: req.body.nom ,
+                prenom: req.body.prenom ,
+                email: req.body.email ,
+                niveau: req.body.niveau || "" ,
+                role: req.body.role ,
+                img_url: req.body.img_url
+            }
+    
+            await User_Model.findOneAndUpdate( { _id: id_utilisateur } , update , { new: true } );                    
+            return res.status(200).json( { message: "Utilisateur modifié avec succès" , updated: true} ) ;
+        }
+
+        const image = req.files.image;
+        image.mv( path.join( "uploads", image.name), (error) => console.log(error) );
+        const file_url = BASE_URL + "/" + image.name ;
+
+        const update = {
+            nom: req.body.nom ,
+            prenom: req.body.prenom ,
+            email: req.body.email ,
+            niveau: req.body.niveau || "" ,
+            role: req.body.role ,
+            img_url: file_url
+        }
+
+        await User_Model.findOneAndUpdate( { _id: id_utilisateur } , update , { new: true } );                    
+        return res.status(200).json( { message: "Utilisateur modifié avec succès" , updated: true} ) ;
+    } 
+    catch( error )
+    {
+        return res.status(400).json( error ) ; 
+    }
+}
+
+delete_or_restore_utilisateur = async ( req , res ) =>
+{
+    try
+    {  
         const id_utilisateur = req.params.id ;
         const utilisateur = await User_Model.findById( id_utilisateur ) ;
 
@@ -98,18 +148,25 @@ update_user_by_id = async ( req , res ) =>
             return res.status(200).json( { message: "Utilisateur non trouvé" , updated: false } ) ;
         }
 
-        const update = {
-            nom: req.body.nom ,
-            prenom: req.body.prenom ,
-            email: req.body.email ,
-            niveau: req.body.niveau || "" ,
-            role: req.body.role ,
-            img_url: req.body.img_url ,
+        if( utilisateur.deleted === true )
+        {
+            await User_Model.findByIdAndUpdate(
+                id_utilisateur , 
+                { deleted: false } ,
+                { new: true }
+            );
+            return res.status(200).json( { message : "L'utilisateur a été bien restaurée" } ) ;
+        }
+        else
+        {
+            await User_Model.findByIdAndUpdate(
+                id_utilisateur , 
+                { deleted: true  }  ,
+                { new: true }
+            );        
+            return res.status(200).json( { message : "L'utilisateur a été bien supprimée" } ) ;
         }
 
-        await User_Model.findOneAndUpdate( { _id: id_utilisateur } , update , { new: true } );
-                
-        return res.status(200).json( { message: "Utilisateur non trouvé" , updated: true} ) ;
     } 
     catch( error )
     {
@@ -117,4 +174,8 @@ update_user_by_id = async ( req , res ) =>
     }
 }
 
-module.exports = { create_user , get_all_utilisateur , get_utilisateur_by_id , update_user_by_id }
+module.exports = { create_user , 
+    get_all_utilisateur , 
+    get_utilisateur_by_id , 
+    update_user_by_id , 
+    delete_or_restore_utilisateur }
