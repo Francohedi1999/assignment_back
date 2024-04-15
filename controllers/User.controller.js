@@ -28,7 +28,7 @@ create_user = async ( req , res ) =>
 
         const password_ = await bcrypt.hash( req.body.password , 10 ) ;
 
-        const new_user = await User_Model.create( {
+        await User_Model.create( {
             nom : req.body.nom ,
             prenom : req.body.prenom ,
             email : req.body.email ,
@@ -136,6 +136,53 @@ update_user_by_id = async ( req , res ) =>
     }
 }
 
+update_profil = async ( req , res ) =>
+{
+    try
+    {  
+        const id_utilisateur = req.body._id ;
+        const utilisateur = await User_Model.findById( id_utilisateur ) ;
+
+        if( !utilisateur )
+        {
+            return res.status(200).json( { message: "Utilisateur non trouvé" , updated: false } ) ;
+        }
+        
+        const password_ = await bcrypt.hash( req.body.password , 10 ) ;
+
+        if ( !req.files || Object.keys(req.files).length === 0 ) 
+        {
+            const update = {
+                nom: req.body.nom ,
+                prenom: req.body.prenom ,
+                password: password_ ,
+                img_url: req.body.img_url
+            }
+    
+            await User_Model.findOneAndUpdate( { _id: id_utilisateur } , update , { new: true } );                    
+            return res.status(200).json( { message: "Utilisateur modifié avec succès" , updated: true} ) ;
+        }
+
+        const image = req.files.image;
+        image.mv( path.join( "uploads", image.name), (error) => console.log(error) );
+        const file_url = BASE_URL + "/" + image.name ;
+
+        const update = {
+            nom: req.body.nom ,
+            prenom: req.body.prenom ,
+            password: password_ ,
+            img_url: file_url
+        }
+
+        await User_Model.findOneAndUpdate( { _id: id_utilisateur } , update , { new: true } );                    
+        return res.status(200).json( { message: "Utilisateur modifié avec succès" , updated: true} ) ;
+    } 
+    catch( error )
+    {
+        return res.status(400).json( error ) ; 
+    }
+}
+
 delete_or_restore_utilisateur = async ( req , res ) =>
 {
     try
@@ -174,8 +221,23 @@ delete_or_restore_utilisateur = async ( req , res ) =>
     }
 }
 
+get_user_logged = async ( req , res , next ) => 
+{
+    try  
+    {
+        const user_logged = req.user ;
+        return res.status(200).json( user_logged ) ;
+    } 
+    catch (error) 
+    {
+        return res.status(400).json( { message: error } )
+    }   
+} ;
+
 module.exports = { create_user , 
+    get_user_logged ,
     get_all_utilisateur , 
     get_utilisateur_by_id , 
     update_user_by_id , 
+    update_profil ,
     delete_or_restore_utilisateur }
