@@ -6,6 +6,7 @@ const cors = require("cors") ;
 const app = express() ;
 const body_parser = require("body-parser") ;
 const User_Routes = require("./routes/User.route") ;
+const Matiere_Routes = require("./routes/matiere.route") ;
 const file_upload = require('express-fileupload');
 const port = process.env.PORT ;
 const path = require("path") ;
@@ -17,6 +18,7 @@ app.use( file_upload() );
 app.use(express.static( path.join(__dirname, 'uploads'))) ;
 
 app.use( "/user" , User_Routes ) ;
+app.use( "/matieres" , Matiere_Routes ) ;
 
 connection_mongoDB() ;
  
