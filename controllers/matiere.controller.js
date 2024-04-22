@@ -2,6 +2,8 @@ const Matiere = require('../models/matiere.model');
 const User = require('../models/User.model');
 const Utils = require('../utils/validationUtils');
 const authMiddleware = require('../middleware/checkAuth');
+const BASE_URL = process.env.BASE_URL ;
+const path = require("path") ;
 
 // Check si une matière avec la meme nom existe
 async function verificationDoublon(nomMatiere) {
@@ -28,6 +30,15 @@ exports.createMatiere = [
                 return res.status(400).json({ message: "Une matière du même nom existe déjà." });
             }
 
+            if ( !req.files || Object.keys(req.files).length === 0 )
+            {
+                return res.status(200).json( { message: "Aucun image uploadé." , created : false } ) ;
+            }
+
+            const image = req.files.imageMatiere;
+            image.mv( path.join( "uploads/images/matieres", image.name), (error) => console.log(error) );
+            const file_url = BASE_URL + "/" + image.name ;
+
             // Vérifier si l'utilisateur avec l'ID idProf existe dans la base de données et a le rôle de professeur
             const professeur = await User.findOne({ _id: idProf, role: 'professeur' });
             if (!professeur) {
@@ -37,7 +48,7 @@ exports.createMatiere = [
             // Créer la matière avec le professeur associé
             const nouvelleMatiere = new Matiere({
                 nom,
-                imageMatiere,
+                imageMatiere:file_url,
                 idProf
             });
 
