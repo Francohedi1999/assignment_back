@@ -6,12 +6,10 @@ const cors = require("cors") ;
 const app = express() ;
 const body_parser = require("body-parser") ;
 const User_Routes = require("./routes/User.route") ;
-<<<<<<< HEAD
 const Matiere_Routes = require("./routes/matiere.route") ;
-=======
 const Auth_Routes = require("./routes/Auth.route");
 const {create_admin} = require("./config/Config") ;
->>>>>>> Franco
+
 const file_upload = require('express-fileupload');
 const port = process.env.PORT ;
 const path = require("path") ;

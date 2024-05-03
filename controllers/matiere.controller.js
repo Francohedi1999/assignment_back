@@ -14,7 +14,6 @@ async function verificationDoublon(nomMatiere) {
 
 // Creer Matiere
 exports.createMatiere = [
-    authMiddleware.verifierAutorisation('Administrateur'),
     async (req, res) => {
         try {
             const { nom, imageMatiere, idProf } = req.body;

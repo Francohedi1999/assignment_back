@@ -23,21 +23,7 @@ login = async ( req , res ) =>
                 const validation_user = await bcrypt.compare( password , user_.password ) ;
                 if( validation_user )
                 {
-                    const token = await jwt.sign(   { 
-                                                        _id: user_.id ,
-                                                        nom: user_.nom ,
-                                                        prenom: user_.prenom ,
-                                                        email: user_.email ,
-                                                        password: user_.password ,
-                                                        img_url : user_.img_url ,
-                                                        role: user_.role ,
-                                                        niveau: user_.niveau ,
-                                                        deleted: user_.deleted ,
-                                                    } , 
-                                                    process.env.SECRET_KEY_JWT || "secret_key" , 
-                                                    { expiresIn: "12h" } 
-                                                ) ;
-
+                    const token = await generateToken(user_.id, user_.role);
                     return res.status(200).json( { message: "Vous êtes bien connecté" , data : token , logged: true } ) ;
                 }
                 return res.status(200).json( { message: "Veuillez bien vérifier votre mot de passe" , logged: false } ) ;
@@ -87,5 +73,13 @@ get_token = async ( req , res , next ) =>
         return res.status(400).json( { message: error } )
     }    
 } ;
+
+function generateToken(userId, userRole) {
+    return jwt.sign(
+        {_id: userId},
+        process.env.SECRET_KEY_JWT || "secret_key" ,
+        { expiresIn: "12h" }
+    );
+}
 
 module.exports = { login , get_token }
