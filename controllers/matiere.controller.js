@@ -64,7 +64,6 @@ exports.createMatiere = [
 ];
 // Update Matiere
 exports.updateMatiere = [
-    authMiddleware.verifierAutorisation('Administrateur'),
     async (req, res) => {
         try {
             const { id } = req.params; // ID Matiere
@@ -131,7 +130,6 @@ exports.getMatiereById = async (req, res) => {
 };
 // Delete Matiere
 exports.deleteMatiere = [
-    authMiddleware.verifierAutorisation('Administrateur'),
     async (req, res) => {
         try {
             const { id } = req.params; // ID Matiere
