@@ -4,7 +4,7 @@ require("dotenv").config();
 const path = require("path") ;
 const bcrypt = require("bcrypt") ;
 const User_Model = require("../models/User.model") ;
-const BASE_URL = process.env.BASE_URL ;
+const BASE_URL = process.env.BASE_URL ; 
 
 
 create_user = async ( req , res ) => 
@@ -225,7 +225,7 @@ get_user_logged = async ( req , res , next ) =>
 {
     try  
     {
-        const user_logged = req.user ;
+        const user_logged = await User_Model.findById( req.user._id ) ;
         return res.status(200).json( user_logged ) ;
     } 
     catch (error) 

@@ -8,6 +8,7 @@ const body_parser = require("body-parser") ;
 const User_Routes = require("./routes/User.route") ;
 const Matiere_Routes = require("./routes/matiere.route") ;
 const Auth_Routes = require("./routes/Auth.route");
+const Assignment_Routes = require("./routes/Assignment.route");
 const {create_admin} = require("./config/Config") ;
 
 const file_upload = require('express-fileupload');
@@ -26,6 +27,7 @@ app.use(express.static( path.join(__dirname, 'uploads'))) ;
 app.use( "/user" , User_Routes ) ;
 app.use( "/matieres" , Matiere_Routes ) ;
 app.use( "/auth" , Auth_Routes ) ;
+app.use( "/assignment" , Assignment_Routes ) ;
  
 app.listen( port , () => {
     console.log("");

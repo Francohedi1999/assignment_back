@@ -23,7 +23,13 @@ login = async ( req , res ) =>
                 const validation_user = await bcrypt.compare( password , user_.password ) ;
                 if( validation_user )
                 {
-                    const token = await generateToken(user_.id, user_.role);
+                    const token = await jwt.sign(   { 
+                                                        _id: user_._id 
+                                                    } , 
+                                                    process.env.SECRET_KEY_JWT || "secret_key" , 
+                                                    { expiresIn: "12h" } 
+                                                ) ;
+
                     return res.status(200).json( { message: "Vous êtes bien connecté" , data : token , logged: true } ) ;
                 }
                 return res.status(200).json( { message: "Veuillez bien vérifier votre mot de passe" , logged: false } ) ;
