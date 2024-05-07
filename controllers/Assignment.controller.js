@@ -6,7 +6,7 @@ const Note_Etudiant_model = require("../models/Note_Etudiant.model") ;
 
 create_assignment = async ( req , res ) => 
 {
-    await Assignment_Model.create( {
+    const assignment = await Assignment_Model.create( {
         matiere_id : req.body.matiere_id , 
         description : req.body.description , 
         niveau : req.body.niveau 
@@ -16,11 +16,10 @@ create_assignment = async ( req , res ) =>
 
     const promises = etudiants.map( etudiant => 
         Note_Etudiant_model.create( {
-                                        matiere_id : req.body.matiere_id ,
+                                        assignment_id : assignment._id ,
                                         etudiant_id : etudiant._id ,
                                         note : 0 ,
-                                        rendu : false ,
-                                        niveau : req.body.niveau 
+                                        rendu : false 
                                     } ) );
 
     await Promise.all(promises);
