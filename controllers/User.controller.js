@@ -225,7 +225,7 @@ get_user_logged = async ( req , res , next ) =>
 {
     try  
     {
-        const user_logged = req.user ;
+        const user_logged = await User_Model.findById( req.user._id ) ;
         return res.status(200).json( user_logged ) ;
     } 
     catch (error) 
