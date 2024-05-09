@@ -5,10 +5,18 @@ const authMiddleware = require('../middleware/checkAuth');
 const BASE_URL = process.env.BASE_URL ;
 const path = require("path") ;
 
+
 // Check si une matière avec la meme nom existe
 async function verificationDoublon(nomMatiere) {
     const regExp = new RegExp('^' + nomMatiere + '$', 'i');
     const matiereExistante = await Matiere.exists({ nom: { $regex: regExp } });
+    return matiereExistante;
+}
+
+// Check si une matière avec la meme nom existe (lors de l'update) Ceci va exclure son propre nom
+async function verificationDoublonUpdate(idMatiere, nomMatiere) {
+    const regExp = new RegExp('^' + nomMatiere + '$', 'i');
+    const matiereExistante = await Matiere.exists({ id: { $ne: idMatiere }, nom: { $regex: regExp } });
     return matiereExistante;
 }
 
@@ -67,7 +75,17 @@ exports.updateMatiere = [
     async (req, res) => {
         try {
             const { id } = req.params; // ID Matiere
-            const { nom, imageMatiere, idProf } = req.body;
+            const { nom, idProf } = req.body;
+
+            // Verification du champ nom
+            if (!nom || !nom.trim()) {
+                return res.status(400).json({ message: "Le nom de la matière est requis." });
+            }
+
+            // Verification du champ idProf
+            if (!idProf || !idProf.trim()) {
+                return res.status(400).json({ message: "Le professeur est requis." });
+            }
 
             // Check si l'ID du professeur is ObjectId valide
             if (!Utils.isValidObjectId(idProf)) {
@@ -82,20 +100,29 @@ exports.updateMatiere = [
             }
 
             // Check Doublon
-                const existeDeja = await verificationDoublon(nom);
-                if (existeDeja) {
-                    return res.status(400).json({ message: "Une matière du même nom existe déjà." });
-                }
+            const existeDeja = await verificationDoublonUpdate(id,nom);
+            if (existeDeja) {
+                return res.status(400).json({ message: "Une matière du même nom existe déjà." });
+            }
 
+            let file_url = matiereResult.imageMatiere;
+
+            // Verifier si une nouvelle image importer
+            if (req.files && req.files.imageMatiere) {
+                const image = req.files.imageMatiere;
+                image.mv(path.join("uploads/images/matieres", image.name), (error) => console.log(error));
+                file_url = BASE_URL + "/" + image.name;
+            }
             // Check et mise a jour de l'ID du professeur
             const professeur = await User.findOne({ _id: idProf, role: 'professeur' });
             if (!professeur) {
                 return res.status(400).json({ message: "Le professeur saisie ne correspond pas à un profil professeur." });
             }
 
+
             // Mettre a jour Matière
             matiereResult.nom = nom;
-            matiereResult.imageMatiere = imageMatiere;
+            matiereResult.imageMatiere = file_url;
             matiereResult.idProf = idProf;
 
             // Save modifications
