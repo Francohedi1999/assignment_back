@@ -14,6 +14,12 @@ create_assignment = async ( req , res ) =>
 
     const etudiants = await User_Model.find( { niveau : req.body.niveau  } ) ;
 
+    if( !etudiants )
+    {
+        return res.status(200).json( {  message: "Veuillez bien ajouter des étudiants pour le niveau " + req.body.niveau , 
+                                        created : false  } ) ;
+    }
+
     const promises = etudiants.map( etudiant => 
         Note_Etudiant_model.create( {
                                         assignment_id : assignment._id ,
@@ -27,6 +33,7 @@ create_assignment = async ( req , res ) =>
     return res.status(200).json( { message: "L'assignement : " + description + " a été bien ajoutée" , created : true  } ) ;
 }
 
+// avec filtre par niveau ou non
 get_all_assignment = async ( req , res ) =>
 {
     try
@@ -46,6 +53,7 @@ get_all_assignment = async ( req , res ) =>
     } 
 } ;
 
+
 get_assignement_by_id = async ( req , res ) =>
 {
     try
@@ -62,5 +70,5 @@ get_assignement_by_id = async ( req , res ) =>
 }
 
 module.exports = {  create_assignment ,
-                    get_all_assignment ,
+                    get_all_assignment , 
                     get_assignement_by_id }
