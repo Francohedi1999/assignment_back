@@ -7,9 +7,15 @@ const app = express() ;
 const body_parser = require("body-parser") ;
 const User_Routes = require("./routes/User.route") ;
 const Matiere_Routes = require("./routes/matiere.route") ;
+const Auth_Routes = require("./routes/Auth.route");
+const {create_admin} = require("./config/Config") ;
+
 const file_upload = require('express-fileupload');
 const port = process.env.PORT ;
 const path = require("path") ;
+
+connection_mongoDB() ;
+create_admin() ; 
 
 app.use( cors() );
 app.use( body_parser.json() );
@@ -19,8 +25,7 @@ app.use(express.static( path.join(__dirname, 'uploads'))) ;
 
 app.use( "/user" , User_Routes ) ;
 app.use( "/matieres" , Matiere_Routes ) ;
-
-connection_mongoDB() ;
+app.use( "/auth" , Auth_Routes ) ;
  
 app.listen( port , () => {
     console.log("");
