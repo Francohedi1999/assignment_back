@@ -1,7 +1,7 @@
 module.exports = {
     roles: {
         etudiant: 'Etudiant',
-        professeur: 'Professeur',
+        enseignant: 'Enseignant',
         administrateur: 'Administrateur'
     }
 }

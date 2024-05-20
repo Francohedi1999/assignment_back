@@ -4,12 +4,12 @@ const matiereController = require('../controllers/matiere.controller');
 const { get_token } = require( "../controllers/Auth.controller" ) ;
 const {verifierAutorisation} = require('../middleware/checkAuth');
 const {roles} = require('../config/roles.config');
-const { etudiant, professeur, administrateur } = roles;
+const { etudiant, enseignant, administrateur } = roles;
 
 // Roles autoriser pour chaque route
-const rolesAutoriserPourCreation = [administrateur, professeur];
-const rolesAutoriserPourLecture = [administrateur,etudiant];
-const rolesAutoriserPourModification = [administrateur, professeur];
+const rolesAutoriserPourCreation = [administrateur, enseignant];
+const rolesAutoriserPourLecture = [administrateur,etudiant, enseignant];
+const rolesAutoriserPourModification = [administrateur, enseignant];
 const rolesAutoriserPourSuppression = [administrateur];
 
 // Creer Matiere (Admin)
