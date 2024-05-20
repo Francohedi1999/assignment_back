@@ -42,39 +42,39 @@ login = async ( req , res ) =>
     }
 } ;
 
-get_token = async ( req , res , next ) => 
-{ 
-    try  
+get_token = async ( req , res , next ) =>
+{
+    try
     {
         const auth_header = req.headers.authorization;
-        if ( !auth_header ) 
+        if ( !auth_header )
         {
             console.log("");
             console.log("Le token est non valide ou absent");
             console.log("");
-            
-            return res.status(400).json( { message: "Le token est non valide ou absent" } )  
+
+            return res.status(400).json( { message: "Le token est non valide ou absent" } )
         }
         const token = auth_header.split(" ")[1];
         const user = jwt.verify( token , process.env.SECRET_KEY_JWT );
-        if ( !user ) 
+        if ( !user )
         {
             console.log("");
             console.log("Le token ne correspond a aucun utilisateur");
             console.log("");
-            
+
             return res.status(400).json( { message: "Le token ne correspond a aucun utilisateur" } )
         }
         req.user = user;
         next();
-    } 
-    catch (error) 
+    }
+    catch (error)
     {
         return res.status(400).json( { message: error } )
-    }    
+    }
 } ;
 
-function generateToken(userId) {
+function generateToken(userId, userRole) {
     return jwt.sign(
         {_id: userId},
         process.env.SECRET_KEY_JWT || "secret_key" ,

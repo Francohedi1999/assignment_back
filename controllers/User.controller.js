@@ -4,7 +4,7 @@ require("dotenv").config();
 const path = require("path") ;
 const bcrypt = require("bcrypt") ;
 const User_Model = require("../models/User.model") ;
-const BASE_URL = process.env.BASE_URL ;
+const BASE_URL = process.env.BASE_URL ; 
 
 
 create_user = async ( req , res ) => 

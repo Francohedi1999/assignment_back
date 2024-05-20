@@ -8,4 +8,4 @@ const assignment_model = mongoose.Schema({
 
 });
  
-module.exports = mongoose.model( "assignments" , assignment_model );
+module.exports = mongoose.model( "assignments" , assignment_model ); 
