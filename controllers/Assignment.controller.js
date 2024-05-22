@@ -5,32 +5,34 @@ const User_Model = require("../models/User.model") ;
 const Note_Etudiant_model = require("../models/Note_Etudiant.model") ;
 
 create_assignment = async ( req , res ) => 
-{
-    const assignment = await Assignment_Model.create( {
-        matiere_id : req.body.matiere_id , 
-        description : req.body.description , 
-        niveau : req.body.niveau 
-    } ) ;
-
+{   
     const etudiants = await User_Model.find( { niveau : req.body.niveau  } ) ;
 
-    if( !etudiants )
+    if( etudiants.length === 0 )
     {
         return res.status(200).json( {  message: "Veuillez bien ajouter des étudiants pour le niveau " + req.body.niveau , 
                                         created : false  } ) ;
     }
-
-    const promises = etudiants.map( etudiant => 
-        Note_Etudiant_model.create( {
-                                        assignment_id : assignment._id ,
-                                        etudiant_id : etudiant._id ,
-                                        note : 0 ,
-                                        rendu : false 
-                                    } ) );
-
-    await Promise.all(promises);
-
-    return res.status(200).json( { message: "L'assignement : " + description + " a été bien ajoutée" , created : true  } ) ;
+    else
+    {
+        const assignment = await Assignment_Model.create( {
+            matiere_id : req.body.matiere_id , 
+            description : req.body.description , 
+            niveau : req.body.niveau 
+        } ) ;
+    
+        const promises = etudiants.map( etudiant => 
+            Note_Etudiant_model.create( {
+                                            assignment_id : assignment._id ,
+                                            etudiant_id : etudiant._id ,
+                                            note : 0 ,
+                                            rendu : false 
+                                        } ) );    
+        await Promise.all(promises);
+    
+        return res.status(200).json( {  message: "L'assignement : " + req.body.description + " a été bien ajoutée" , 
+                                        created : true  } ) ;
+    }
 }
 
 // avec filtre par niveau ou non

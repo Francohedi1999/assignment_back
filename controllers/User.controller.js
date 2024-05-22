@@ -23,8 +23,8 @@ create_user = async ( req , res ) =>
         }
 
         const image = req.files.image;
-        image.mv( path.join( "uploads", image.name), (error) => console.log(error) );
-        const file_url = BASE_URL + "/" + image.name ;
+        image.mv( path.join( "uploads/images_users", image.name), (error) => console.log(error) );
+        const file_url = BASE_URL + "/images_users/" + image.name ;
 
         const password_ = await bcrypt.hash( req.body.password , 10 ) ;
 
@@ -115,9 +115,9 @@ update_user_by_id = async ( req , res ) =>
         }
 
         const image = req.files.image;
-        image.mv( path.join( "uploads", image.name), (error) => console.log(error) );
-        const file_url = BASE_URL + "/" + image.name ;
-
+        image.mv( path.join( "uploads/images_users", image.name), (error) => console.log(error) );
+        const file_url = BASE_URL + "/images_users/" + image.name ;
+ 
         const update = {
             nom: req.body.nom ,
             prenom: req.body.prenom ,
@@ -164,8 +164,8 @@ update_profil = async ( req , res ) =>
         }
 
         const image = req.files.image;
-        image.mv( path.join( "uploads", image.name), (error) => console.log(error) );
-        const file_url = BASE_URL + "/" + image.name ;
+        image.mv( path.join( "uploads/images_users", image.name), (error) => console.log(error) );
+        const file_url = BASE_URL + "/images_users/" + image.name ;
 
         const update = {
             nom: req.body.nom ,
