@@ -2,6 +2,7 @@ const Matiere = require('../models/matiere.model');
 const User = require('../models/User.model');
 const Utils = require('../utils/validationUtils');
 const authMiddleware = require('../middleware/checkAuth');
+const { roles } = require('../config/roles.config');
 const BASE_URL = process.env.BASE_URL ;
 const path = require("path") ;
 
@@ -58,9 +59,9 @@ exports.createMatiere = [
             const file_url = BASE_URL + "/" + cheminImage + "/" + image.name ;
 
             // Vérifier si l'utilisateur avec l'ID idProf existe dans la base de données et a le rôle de professeur
-            const professeur = await User.findOne({ _id: idProf, role: 'professeur' });
+            const professeur = await User.findOne({ _id: idProf, role: roles.enseignant.toLowerCase() });
             if (!professeur) {
-                errors.push("Le professeur saisi ne correspond pas à un profil professeur.");
+                errors.push("L'enseignant saisi ne correspond pas à un profil enseignant.");
             }
 
             if (errors.length > 0){
@@ -131,9 +132,9 @@ exports.updateMatiere = [
                 file_url = BASE_URL + "/" + cheminImage + "/" + image.name ;
             }
             // Check et mise a jour de l'ID du professeur
-            const professeur = await User.findOne({ _id: idProf, role: 'professeur' });
+            const professeur = await User.findOne({ _id: idProf, role: roles.enseignant.toLowerCase() });
             if (!professeur) {
-                errors.push("Le professeur saisi ne correspond pas à un profil professeur.");
+                errors.push("L'enseignant saisi ne correspond pas à un profil enseignant.");
             }
 
             if (errors.length > 0){

@@ -12,6 +12,8 @@ const rolesAutoriserPourLecture = [administrateur,etudiant, enseignant];
 const rolesAutoriserPourModification = [administrateur, enseignant];
 const rolesAutoriserPourSuppression = [administrateur];
 
+// La fonction verifierAutorisation(roleAutoriserAlAction) ici verifie si l'utilisateur a le role autorisé pour effectuer l'action
+
 // Creer Matiere (Admin)
 router.post('/', [ get_token , verifierAutorisation(rolesAutoriserPourCreation), matiereController.createMatiere ]);
 // Read Matiere (Admin)

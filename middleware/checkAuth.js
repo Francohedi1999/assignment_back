@@ -17,7 +17,7 @@ console.log(user);
                 roleAutoriser = roleAutoriser.map(role => role.toLowerCase());
 
                 if (!allRoles.roles.hasOwnProperty(userRole) || !roleAutoriser.includes(userRole)) {
-                    return res.status(403).json({message: "Vous n'avez pas l'autorisation pour cette action."});
+                    return res.status(403).json({message: "Vous n'avez pas le role requis pour effectuer cette action."});
                 }
                 next();
             } catch (error) {
