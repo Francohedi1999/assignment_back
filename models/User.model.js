@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoose_pagination = require('mongoose-aggregate-paginate-v2');
 
 const user_model = mongoose.Schema({
 
@@ -12,5 +13,7 @@ const user_model = mongoose.Schema({
     deleted : { type: Boolean , required: true } ,
 
 });
+
+user_model.plugin(mongoose_pagination);
  
 module.exports = mongoose.model( "users" , user_model ); 
