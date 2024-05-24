@@ -18,7 +18,8 @@ create_assignment = async ( req , res ) =>
         const assignment = await Assignment_Model.create( {
             matiere_id : req.body.matiere_id , 
             description : req.body.description , 
-            niveau : req.body.niveau 
+            niveau : req.body.niveau ,
+            dl: req.body.dl
         } ) ;
     
         const promises = etudiants.map( etudiant => 
