@@ -59,10 +59,10 @@ exports.createMatiere = [
             const file_url = BASE_URL + "/" + cheminImage + "/" + image.name ;
 
             // Vérifier si l'utilisateur avec l'ID idProf existe dans la base de données et a le rôle de professeur
-            const professeur = await User.findOne({ _id: idProf, role: roles.enseignant.toLowerCase() });
-            if (!professeur) {
-                errors.push("L'enseignant saisi ne correspond pas à un profil enseignant.");
-            }
+            // const professeur = await User.findOne({ _id: idProf, role: roles.enseignant.toLowerCase() });
+            // if (!professeur) {
+            //     errors.push("L'enseignant saisi ne correspond pas à un profil enseignant.");
+            // }
 
             if (errors.length > 0){
                 return res.json({ errors,status:400 });
