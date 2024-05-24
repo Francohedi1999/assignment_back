@@ -7,6 +7,5 @@ const note_etudiant_model = mongoose.Schema({
     note : { type: Number , required: true  } ,
     rendu : { type: Boolean , required: false } 
 
-});
- 
+}); 
 module.exports = mongoose.model( "note_etudiants" , note_etudiant_model );

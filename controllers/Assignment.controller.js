@@ -41,14 +41,31 @@ get_all_assignment = async ( req , res ) =>
 {
     try
     {
+        let aggregate_query = Assignment_Model.aggregate() ;
+
         const niveau_filtre = req.query.filtre_niveau ;
-        if( !niveau_filtre )
+        if( niveau_filtre )
         {            
-            const assignements = await Assignment_Model.find() ;
-            return res.status(200).json( assignements ) ;
+            aggregate_query.match({ niveau: niveau_filtre });
         }
-        const assignements_filtred = await Assignment_Model.find( { niveau: niveau_filtre} ) ;
-        return res.status(200).json( assignements_filtred ) ;
+
+        const options = 
+        {
+            page: parseInt(req.query.page) || 1 ,
+            limit: parseInt(req.query.limit) || 10
+        };
+        Assignment_Model.aggregatePaginate(aggregate_query, options, ( error , data ) => 
+        {
+            if (error) 
+            {
+                console.log(error);
+            } 
+            else 
+            {
+                
+                return res.status(200).json( data ) ;
+            }
+        });
     }
     catch (error) 
     {
