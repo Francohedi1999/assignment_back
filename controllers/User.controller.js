@@ -98,10 +98,16 @@ get_all_utilisateur = async ( req , res ) =>
         let aggregate_query = User_Model.aggregate() ;
 
         const role_filtre = req.query.filtre_role ;
+        const niveau_filtre = req.query.niveau_filtre ;
 
         if( role_filtre )
         {            
             aggregate_query.match({ role: role_filtre });
+        }
+
+        if( niveau_filtre )
+        {            
+            aggregate_query.match({ niveau: niveau_filtre });
         }
 
         const options = 
