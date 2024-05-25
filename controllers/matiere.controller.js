@@ -132,10 +132,10 @@ exports.updateMatiere = [
                 file_url = BASE_URL + "/" + cheminImage + "/" + image.name ;
             }
             // Check et mise a jour de l'ID du professeur
-            const professeur = await User.findOne({ _id: idProf, role: roles.enseignant.toLowerCase() });
-            if (!professeur) {
-                errors.push("L'enseignant saisi ne correspond pas à un profil enseignant.");
-            }
+            // const professeur = await User.findOne({ _id: idProf, role: roles.enseignant.toLowerCase() });
+            // if (!professeur) {
+            //     errors.push("L'enseignant saisi ne correspond pas à un profil enseignant.");
+            // }
 
             if (errors.length > 0){
                 return res.json({ errors,status:400 });
@@ -196,9 +196,19 @@ exports.deleteMatiere = [
 ];
 // Get All Matiere
 exports.getAllMatieres = async (req, res) => {
-    try {
+    try 
+    {
         // Get All Matiere dans bdd
-        const matieres = await Matiere.find();
+        const enseignant_id = req.query.enseignant_id ;
+        let matieres = null ;
+        if( enseignant_id )
+        {
+            matieres = await Matiere.find({ idProf: enseignant_id });
+        }
+        else
+        {
+            matieres = await Matiere.find();
+        }
 
         return res.status(200).json({
             message: "Liste des matières récupérée avec succès!",

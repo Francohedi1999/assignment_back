@@ -3,6 +3,7 @@ require("dotenv").config();
 const Assignment_Model = require("../models/Assignment.model") ;
 const User_Model = require("../models/User.model") ;
 const Note_Etudiant_model = require("../models/Note_Etudiant.model") ;
+const Matiere_Model = require("../models/matiere.model") ;
 
 create_assignment = async ( req , res ) => 
 {   
@@ -19,7 +20,8 @@ create_assignment = async ( req , res ) =>
             matiere_id : req.body.matiere_id , 
             description : req.body.description , 
             niveau : req.body.niveau ,
-            dl: req.body.dl
+            dl: req.body.dl ,
+            ens_id:  req.body.ens_id
         } ) ;
     
         const promises = etudiants.map( etudiant => 
@@ -43,11 +45,18 @@ get_all_assignment = async ( req , res ) =>
     {
         let aggregate_query = Assignment_Model.aggregate() ;
 
+        const id_enseignant = req.query.id_enseignant ;
+        if( id_enseignant )
+        {     
+            aggregate_query.match({ ens_id: id_enseignant });
+        }
+
         const niveau_filtre = req.query.filtre_niveau ;
         if( niveau_filtre )
         {            
             aggregate_query.match({ niveau: niveau_filtre });
         }
+
 
         const options = 
         {

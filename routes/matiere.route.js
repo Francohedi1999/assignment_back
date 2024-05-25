@@ -8,7 +8,7 @@ const { etudiant, enseignant, administrateur } = roles;
 
 // Roles autoriser pour chaque route
 const rolesAutoriserPourCreation = [administrateur, enseignant];
-const rolesAutoriserPourLecture = [administrateur,etudiant, enseignant];
+const rolesAutoriserPourLecture = [ administrateur , etudiant , enseignant];
 const rolesAutoriserPourModification = [administrateur, enseignant];
 const rolesAutoriserPourSuppression = [administrateur];
 
