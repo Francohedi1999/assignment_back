@@ -59,10 +59,10 @@ exports.createMatiere = [
             const file_url = BASE_URL + "/" + cheminImage + "/" + image.name ;
 
             // Vérifier si l'utilisateur avec l'ID idProf existe dans la base de données et a le rôle de professeur
-            const professeur = await User.findOne({ _id: idProf, role: roles.enseignant.toLowerCase() });
-            if (!professeur) {
-                errors.push("L'enseignant saisi ne correspond pas à un profil enseignant.");
-            }
+            // const professeur = await User.findOne({ _id: idProf, role: roles.enseignant.toLowerCase() });
+            // if (!professeur) {
+            //     errors.push("L'enseignant saisi ne correspond pas à un profil enseignant.");
+            // }
 
             if (errors.length > 0){
                 return res.json({ errors,status:400 });
@@ -132,10 +132,10 @@ exports.updateMatiere = [
                 file_url = BASE_URL + "/" + cheminImage + "/" + image.name ;
             }
             // Check et mise a jour de l'ID du professeur
-            const professeur = await User.findOne({ _id: idProf, role: roles.enseignant.toLowerCase() });
-            if (!professeur) {
-                errors.push("L'enseignant saisi ne correspond pas à un profil enseignant.");
-            }
+            // const professeur = await User.findOne({ _id: idProf, role: roles.enseignant.toLowerCase() });
+            // if (!professeur) {
+            //     errors.push("L'enseignant saisi ne correspond pas à un profil enseignant.");
+            // }
 
             if (errors.length > 0){
                 return res.json({ errors,status:400 });
@@ -204,7 +204,16 @@ exports.deleteMatiere = [
 exports.getAllMatieres = async (req, res) => {
     try {
         // Get All Matiere dans bdd
-        const matieres = await Matiere.find({ deleted: false });
+        const enseignant_id = req.query.enseignant_id ;
+        let matieres = null ;
+        if( enseignant_id )
+        {
+            matieres = await Matiere.find({ idProf: enseignant_id });
+        }
+        else
+        {
+            matieres = await Matiere.find({ deleted: false });
+        }
 
         return res.status(200).json({
             message: "Liste des matières récupérée avec succès!",

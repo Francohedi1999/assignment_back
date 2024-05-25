@@ -9,7 +9,7 @@ const User_model = require('../models/User.model') ;
             try {
                 const userId = req.user._id; // Get ID de l'utilisateur a partir du token
                 const user = await User_model.findById(userId); // Rechercher l'utilisateur dans la bdd
-console.log(user);
+                console.log(user);
                 if (!user) {
                     return res.status(403).json({message: "Utilisateur non trouvé."});
                 }

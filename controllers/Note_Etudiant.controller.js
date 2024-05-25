@@ -11,6 +11,7 @@ get_note_by_assignment = async ( req , res ) =>
     { 
         const assignment_id = req.params.assignment_id ;
         const notes = await Note_Etudiant_model.find( { assignment_id : assignment_id } ) ;
+
         return res.status(200).json( notes ) ;
     } 
     catch( error )

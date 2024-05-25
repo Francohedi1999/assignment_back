@@ -8,7 +8,7 @@ const { etudiant, enseignant, administrateur } = roles;
 
 // Roles autoriser pour chaque route
 const rolesAutoriserPourCreation = [administrateur, enseignant];
-const rolesAutoriserPourLecture = [administrateur,etudiant, enseignant];
+const rolesAutoriserPourLecture = [ administrateur , etudiant , enseignant];
 const rolesAutoriserPourModification = [administrateur, enseignant];
 const rolesAutoriserPourSuppression = [administrateur];
 
@@ -17,7 +17,7 @@ const rolesAutoriserPourSuppression = [administrateur];
 // Creer Matiere (Admin)
 router.post('/', [ get_token , verifierAutorisation(rolesAutoriserPourCreation), matiereController.createMatiere ]);
 // Read Matiere (Admin)
-router.get('/', [ get_token , verifierAutorisation(rolesAutoriserPourLecture),matiereController.getAllMatieres ]);
+router.get('/', [ get_token , verifierAutorisation(rolesAutoriserPourLecture), matiereController.getAllMatieres ]);
 router.get('/:id', [ get_token , verifierAutorisation(rolesAutoriserPourLecture),matiereController.getMatiereById ]);
 // Update Matiere (Admin)
 router.put('/:id', [ get_token , verifierAutorisation(rolesAutoriserPourModification),matiereController.updateMatiere ]);

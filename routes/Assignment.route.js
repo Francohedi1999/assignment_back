@@ -2,8 +2,7 @@ const express = require("express") ;
 const router = express.Router() ;
 const { create_assignment , 
     get_all_assignment , 
-    get_assignement_by_id ,
-    get_all_assignment_filtred } = require("../controllers/Assignment.controller"); 
+    get_assignement_by_id } = require("../controllers/Assignment.controller"); 
 const { get_token } = require( "../controllers/Auth.controller" ) ;
 
 router.post( "/" , [ get_token , create_assignment ] ) ;

@@ -23,8 +23,8 @@ create_user = async ( req , res ) =>
         }
 
         const image = req.files.image;
-        image.mv( path.join( "uploads", image.name), (error) => console.log(error) );
-        const file_url = BASE_URL + "/" + image.name ;
+        image.mv( path.join( "uploads/images_users", image.name), (error) => console.log(error) );
+        const file_url = BASE_URL + "/images_users/" + image.name ;
 
         const password_ = await bcrypt.hash( req.body.password , 10 ) ;
 
@@ -53,7 +53,26 @@ create_user = async ( req , res ) =>
     }
 } ;
 
-get_all_utilisateur = async ( req , res ) =>
+// function getAssignments(req, res){
+//     let aggregateQuery = Assignment.aggregate();
+
+//     Assignment.aggregatePaginate(
+//         aggregateQuery, 
+//         {
+//             page: parseInt(req.query.page) || 1,
+//             limit: parseInt(req.query.limit) || 10
+//         },
+//         (err, data) => {
+//             if(err){
+//                 res.send(err)
+//             }
+    
+//             res.send(data);
+//         }
+//     );
+// }
+
+get_utilisateur_no_pagination = async ( req , res ) =>
 {
     try
     {
@@ -68,6 +87,50 @@ get_all_utilisateur = async ( req , res ) =>
     }
     catch (error) 
     {
+        return res.status(400).json( { message: error } )
+    } 
+}
+
+get_all_utilisateur = async ( req , res ) =>
+{
+    try
+    {
+        let aggregate_query = User_Model.aggregate() ;
+
+        const role_filtre = req.query.filtre_role ;
+        const niveau_filtre = req.query.niveau_filtre ;
+
+        if( role_filtre )
+        {            
+            aggregate_query.match({ role: role_filtre });
+        }
+
+        if( niveau_filtre )
+        {            
+            aggregate_query.match({ niveau: niveau_filtre });
+        }
+
+        const options = 
+        {
+            page: parseInt(req.query.page) || 1 ,
+            limit: parseInt(req.query.limit) || 10
+        };
+
+        User_Model.aggregatePaginate(aggregate_query, options, ( error , data ) => 
+        {
+            if (error) 
+            {
+                console.log(error);
+            } 
+            else 
+            {
+                return res.status(200).json( data ) ;
+            }
+        });
+    }
+    catch (error) 
+    {
+        console.log( error )
         return res.status(400).json( { message: error } )
     } 
 } ;
@@ -115,9 +178,9 @@ update_user_by_id = async ( req , res ) =>
         }
 
         const image = req.files.image;
-        image.mv( path.join( "uploads", image.name), (error) => console.log(error) );
-        const file_url = BASE_URL + "/" + image.name ;
-
+        image.mv( path.join( "uploads/images_users", image.name), (error) => console.log(error) );
+        const file_url = BASE_URL + "/images_users/" + image.name ;
+ 
         const update = {
             nom: req.body.nom ,
             prenom: req.body.prenom ,
@@ -164,8 +227,8 @@ update_profil = async ( req , res ) =>
         }
 
         const image = req.files.image;
-        image.mv( path.join( "uploads", image.name), (error) => console.log(error) );
-        const file_url = BASE_URL + "/" + image.name ;
+        image.mv( path.join( "uploads/images_users", image.name), (error) => console.log(error) );
+        const file_url = BASE_URL + "/images_users/" + image.name ;
 
         const update = {
             nom: req.body.nom ,
@@ -240,4 +303,5 @@ module.exports = { create_user ,
     get_utilisateur_by_id , 
     update_user_by_id , 
     update_profil ,
+    get_utilisateur_no_pagination ,
     delete_or_restore_utilisateur }
