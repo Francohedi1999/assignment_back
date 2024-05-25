@@ -10,14 +10,14 @@ const path = require("path") ;
 // Check si une matière avec la meme nom existe
 async function verificationDoublon(nomMatiere) {
     const regExp = new RegExp('^' + nomMatiere + '$', 'i');
-    const matiereExistante = await Matiere.exists({ nom: { $regex: regExp } });
+    const matiereExistante = await Matiere.exists({ nom: { $regex: regExp }, deleted: false });
     return matiereExistante;
 }
 
 // Check si une matière avec la meme nom existe (lors de l'update) Ceci va exclure son propre nom
 async function verificationDoublonUpdate(idMatiere, nomMatiere) {
     const regExp = new RegExp('^' + nomMatiere + '$', 'i');
-    const matiereExistante = await Matiere.exists({ id: { $ne: idMatiere }, nom: { $regex: regExp } });
+    const matiereExistante = await Matiere.exists({ id: { $ne: idMatiere }, nom: { $regex: regExp }, deleted: false });
     return matiereExistante;
 }
 
@@ -163,7 +163,7 @@ exports.getMatiereById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const matiere = await Matiere.findOne({ id: id });
+        const matiere = await Matiere.findOne({ id: id, deleted: false });
 
 
         if (!matiere) {
@@ -184,10 +184,16 @@ exports.deleteMatiere = [
             const { id } = req.params; // ID Matiere
 
             // Delete Matiere
-            const matiereDeleted = await Matiere.findOneAndDelete({ id: id });
-            if (!matiereDeleted) {
+            const matiere = await Matiere.findOne({ id: id });
+            if (!matiere) {
                 return res.status(404).json({ message: "La matière n'existe pas !" });
             }
+            // Mettre à jour les champs de suppression logique
+            matiere.deleted = true;
+            matiere.deletedAt = new Date();
+            // Sauvegarder les modifications
+            await matiere.save();
+
             return res.status(200).json({ message: "Matière supprimée avec succès!" });
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -198,7 +204,7 @@ exports.deleteMatiere = [
 exports.getAllMatieres = async (req, res) => {
     try {
         // Get All Matiere dans bdd
-        const matieres = await Matiere.find();
+        const matieres = await Matiere.find({ deleted: false });
 
         return res.status(200).json({
             message: "Liste des matières récupérée avec succès!",
