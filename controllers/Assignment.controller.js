@@ -29,7 +29,8 @@ create_assignment = async ( req , res ) =>
                                             assignment_id : assignment._id ,
                                             etudiant_id : etudiant._id ,
                                             note : 0 ,
-                                            rendu : false 
+                                            rendu : false ,
+                                            noted : false 
                                         } ) );    
         await Promise.all(promises);
     
