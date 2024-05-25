@@ -11,14 +11,14 @@ const { create_user ,
 const { get_token } = require( "../controllers/Auth.controller" ) ;
 
 router.post( "/" , [ get_token , create_user ] ) ;
-router.post( "/update" , [ get_token , update_user_by_id ] ) ;
-router.post( "/update_profile" , [ get_token , update_profil ] ) ;
+router.put( "/update/:id_user" , [ get_token , update_user_by_id ] ) ;
+router.put( "/update_profile/:id_user" , [ get_token , update_profil ] ) ;
 
 router.get( "/" , [ get_token , get_all_utilisateur ] ) ;
 router.get( "/no_pagination" , [ get_token , get_utilisateur_no_pagination ] ) ;
 router.get( "/user_logged" , [ get_token , get_user_logged ] ) ;
 router.get( "/:id" , [ get_token , get_utilisateur_by_id ] ) ;
-router.get( "/delete_or_restore/:id" , [ get_token , delete_or_restore_utilisateur ] ) ;
+router.put( "/delete_or_restore/:id_user" , [ get_token , delete_or_restore_utilisateur ] ) ;
 
 module.exports = router 
 

@@ -53,25 +53,6 @@ create_user = async ( req , res ) =>
     }
 } ;
 
-// function getAssignments(req, res){
-//     let aggregateQuery = Assignment.aggregate();
-
-//     Assignment.aggregatePaginate(
-//         aggregateQuery, 
-//         {
-//             page: parseInt(req.query.page) || 1,
-//             limit: parseInt(req.query.limit) || 10
-//         },
-//         (err, data) => {
-//             if(err){
-//                 res.send(err)
-//             }
-    
-//             res.send(data);
-//         }
-//     );
-// }
-
 get_utilisateur_no_pagination = async ( req , res ) =>
 {
     try
@@ -154,7 +135,7 @@ update_user_by_id = async ( req , res ) =>
 {
     try
     {  
-        const id_utilisateur = req.body._id ;
+        const id_utilisateur = req.params.id_user ;
         const utilisateur = await User_Model.findById( id_utilisateur ) ;
 
         if( !utilisateur )
@@ -203,7 +184,7 @@ update_profil = async ( req , res ) =>
 {
     try
     {  
-        const id_utilisateur = req.body._id ;
+        const id_utilisateur = req.params.id_user ;
         const utilisateur = await User_Model.findById( id_utilisateur ) ;
 
         if( !utilisateur )
@@ -250,7 +231,7 @@ delete_or_restore_utilisateur = async ( req , res ) =>
 {
     try
     {  
-        const id_utilisateur = req.params.id ;
+        const id_utilisateur = req.params.id_user ;
         const utilisateur = await User_Model.findById( id_utilisateur ) ;
 
         if( !utilisateur )
