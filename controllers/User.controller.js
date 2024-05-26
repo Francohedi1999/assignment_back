@@ -82,7 +82,8 @@ get_utilisateur_no_pagination = async ( req , res ) =>
             const users = await User_Model.find() ;
             return res.status(200).json( users ) ;
         }
-        const users_filtred = await User_Model.find( { role: role_filtre} ) ;
+        const regex = new RegExp(role_filtre, 'i'); // Une expression régulière pour ignorer la casse
+        const users_filtred = await User_Model.find( { role: regex} ) ;
         return res.status(200).json( users_filtred ) ;
     }
     catch (error) 
