@@ -201,7 +201,7 @@ exports.deleteMatiere = [
     }
 ];
 // Get All Matiere
-exports.getAllMatieres = async (req, res) => {
+/*exports.getAllMatieres = async (req, res) => {
     try {
         // Get All Matiere dans bdd
         const enseignant_id = req.query.enseignant_id ;
@@ -214,6 +214,43 @@ exports.getAllMatieres = async (req, res) => {
         {
             matieres = await Matiere.find({ deleted: false });
         }
+
+        return res.status(200).json({
+            message: "Liste des matières récupérée avec succès!",
+            data: matieres
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};*/
+
+// Get All Matiere
+exports.getAllMatieres = async (req, res) => {
+    try {
+        const enseignant_id = req.query.enseignant_id;
+        let matchCondition = { deleted: false };
+
+        if (enseignant_id) {
+            matchCondition.idProf = enseignant_id;
+        }
+
+        const matieres = await Matiere.aggregate([
+            { $match: matchCondition },
+            {
+                $addFields: {
+                    idProf: { $toObjectId: "$idProf" } // Convertir l'ID de l'enseignant en ObjectId
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'idProf',
+                    foreignField: '_id',
+                    as: 'enseignant'
+                }
+            },
+            { $unwind: '$enseignant' }
+        ]);
 
         return res.status(200).json({
             message: "Liste des matières récupérée avec succès!",
