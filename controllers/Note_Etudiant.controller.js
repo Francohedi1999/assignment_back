@@ -9,10 +9,40 @@ get_note_by_assignment = async ( req , res ) =>
 {    
     try
     { 
+        let aggregate_query = Note_Etudiant_model.aggregate();
+        
         const assignment_id = req.params.assignment_id ;
-        const notes = await Note_Etudiant_model.find( { assignment_id : assignment_id } ) ;
+        aggregate_query.match({ assignment_id: assignment_id });
+        
+        if (req.query.filtre_rendu !== 'undefined') 
+        {
+            const rendu = req.query.filtre_rendu === 'true';
+            aggregate_query.match({ rendu: rendu });
+        }
 
-        return res.status(200).json( notes ) ;
+        if (req.query.filtre_noted !== 'undefined') 
+        {
+            const noted = req.query.filtre_noted === 'true';
+            aggregate_query.match({ noted: noted });
+        }
+
+        const options = 
+        {
+            page: parseInt( req.query.page ) || 1 ,
+            limit: parseInt( req.query.limit ) || 10
+        };
+
+        Note_Etudiant_model.aggregatePaginate(aggregate_query, options, ( error , data ) => 
+        {
+            if (error) 
+            {
+                console.log(error);
+            } 
+            else 
+            {
+                return res.status(200).json( data ) ;
+            }
+        });
     } 
     catch( error )
     {

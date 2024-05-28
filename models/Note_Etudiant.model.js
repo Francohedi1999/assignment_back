@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoose_pagination = require('mongoose-aggregate-paginate-v2');
 
 const note_etudiant_model = mongoose.Schema({
 
@@ -9,4 +10,5 @@ const note_etudiant_model = mongoose.Schema({
     noted : { type: Boolean , required: false } ,
 
 }); 
+note_etudiant_model.plugin(mongoose_pagination);
 module.exports = mongoose.model( "note_etudiants" , note_etudiant_model );
