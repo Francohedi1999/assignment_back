@@ -4,6 +4,8 @@ require("dotenv").config();
 const path = require("path") ;
 const bcrypt = require("bcrypt") ;
 const User_Model = require("../models/User.model") ;
+const Assignment_Model = require("../models/Assignment.model") ;
+const Note_Etudiant_model = require("../models/Note_Etudiant.model") ;
 const BASE_URL = process.env.BASE_URL ; 
 
 
@@ -28,7 +30,7 @@ create_user = async ( req , res ) =>
 
         const password_ = await bcrypt.hash( req.body.password , 10 ) ;
 
-        await User_Model.create( {
+        const new_utilisateur = await User_Model.create( {
             nom : req.body.nom ,
             prenom : req.body.prenom ,
             email : req.body.email ,
@@ -38,6 +40,22 @@ create_user = async ( req , res ) =>
             niveau : req.body.niveau || "",
             deleted : false ,
         } ) ;
+
+        const assignments = await Assignment_Model.find({ niveau: new_utilisateur.niveau });
+
+        if( assignments.length !== 0 )
+        {
+            const promises = assignments.map( assignment => 
+                Note_Etudiant_model.create( {
+                                                assignment_id: assignment._id,
+                                                etudiant_id: new_utilisateur._id,
+                                                note: 0,
+                                                rendu: false,
+                                                noted: false
+                                            })
+            );
+            await Promise.all(promises);
+        }
 
         return res.status(200).json( { message: "L'utilisateur a été bien ajoutée" , created : true  } ) ;
 
@@ -52,25 +70,6 @@ create_user = async ( req , res ) =>
         return res.status(400).json( error ) ; 
     }
 } ;
-
-// function getAssignments(req, res){
-//     let aggregateQuery = Assignment.aggregate();
-
-//     Assignment.aggregatePaginate(
-//         aggregateQuery, 
-//         {
-//             page: parseInt(req.query.page) || 1,
-//             limit: parseInt(req.query.limit) || 10
-//         },
-//         (err, data) => {
-//             if(err){
-//                 res.send(err)
-//             }
-    
-//             res.send(data);
-//         }
-//     );
-// }
 
 get_utilisateur_no_pagination = async ( req , res ) =>
 {
@@ -155,7 +154,7 @@ update_user_by_id = async ( req , res ) =>
 {
     try
     {  
-        const id_utilisateur = req.body._id ;
+        const id_utilisateur = req.params.id_user ;
         const utilisateur = await User_Model.findById( id_utilisateur ) ;
 
         if( !utilisateur )
@@ -204,7 +203,7 @@ update_profil = async ( req , res ) =>
 {
     try
     {  
-        const id_utilisateur = req.body._id ;
+        const id_utilisateur = req.params.id_user ;
         const utilisateur = await User_Model.findById( id_utilisateur ) ;
 
         if( !utilisateur )
@@ -251,7 +250,7 @@ delete_or_restore_utilisateur = async ( req , res ) =>
 {
     try
     {  
-        const id_utilisateur = req.params.id ;
+        const id_utilisateur = req.params.id_user ;
         const utilisateur = await User_Model.findById( id_utilisateur ) ;
 
         if( !utilisateur )

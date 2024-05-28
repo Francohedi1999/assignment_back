@@ -40,14 +40,14 @@ ajout_note_etu = async (req , res ) =>
 {
     try
     { 
-        const id_note = req.body._id ;
+        const id_note = req.params.id_note ;
         const note_ = await Note_Etudiant_model.findById( id_note ) ;
         if( !note_ )
         {
             return res.status(200).json( { message: "Note non trouvée" , updated: false } ) ;
         }
 
-        const note_update = { note : req.body.note , rendu : true } ;
+        const note_update = { note : req.body.note , noted : true  } ;
         await Note_Etudiant_model.findOneAndUpdate( { _id: id_note } , note_update , { new: true } );                    
         return res.status(200).json( { message: "Note ajoutée avec succès" , updated: true} ) ;
     } 
@@ -57,4 +57,29 @@ ajout_note_etu = async (req , res ) =>
     }
 }
 
-module.exports = { get_note_by_assignment , get_note_by_assignment_etu , ajout_note_etu }
+make_assignement = async (req , res ) => 
+{
+    try
+    { 
+        const id_note = req.params.id_note ;
+        const note_ = await Note_Etudiant_model.findById( id_note ) ;
+        if( !note_ )
+        {
+            return res.status(200).json( { message: "Note non trouvée" , updated: false } ) ;
+        }
+
+        const note_update = { rendu : true } ;
+        await Note_Etudiant_model.findOneAndUpdate( { _id: id_note } , note_update , { new: true } );                    
+        return res.status(200).json( { message: "Assignation rendu avec succès" , updated: true} ) ;
+    } 
+    catch( error )
+    {
+        return res.status(400).json( error ) ; 
+    }
+}
+
+module.exports = { 
+    get_note_by_assignment , 
+    get_note_by_assignment_etu , 
+    ajout_note_etu , 
+    make_assignement }
