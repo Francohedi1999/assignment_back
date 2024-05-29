@@ -7,7 +7,8 @@ const assignment_model = mongoose.Schema({
     ens_id : { type: String , required: true } ,
     description : { type: String , required: true  } ,
     niveau : { type: String , required: false } ,
-    dl : { type: Date , required: true } 
+    dl : { type: Date , required: true } ,
+    canceled : { type: Boolean , required: true } ,
 
 });
 

@@ -1,7 +1,7 @@
 require('mongoose') ;
 require("dotenv").config();
 const Assignment_Model = require("../models/Assignment.model") ;
-const User_Model = require("../models/User.model") ;
+const Note_etu_Model = require("../models/Note_Etudiant.model") ;
 const Note_Etudiant_model = require("../models/Note_Etudiant.model") ;
 
 
@@ -14,15 +14,17 @@ get_note_by_assignment = async ( req , res ) =>
         const assignment_id = req.params.assignment_id ;
         aggregate_query.match({ assignment_id: assignment_id });
         
-        if (req.query.filtre_rendu !== 'undefined') 
+        const filtre_rendu = req.query.filtre_rendu;
+        if (filtre_rendu !== 'undefined') 
         {
-            const rendu = req.query.filtre_rendu === 'true';
+            const rendu = filtre_rendu === 'true';
             aggregate_query.match({ rendu: rendu });
         }
 
-        if (req.query.filtre_noted !== 'undefined') 
+        const filtre_noted = req.query.filtre_noted
+        if (filtre_noted !== 'undefined') 
         {
-            const noted = req.query.filtre_noted === 'true';
+            const noted = filtre_noted === 'true';
             aggregate_query.match({ noted: noted });
         }
 
@@ -100,13 +102,14 @@ make_assignement = async (req , res ) =>
 
         const note_update = { rendu : true } ;
         await Note_Etudiant_model.findOneAndUpdate( { _id: id_note } , note_update , { new: true } );                    
-        return res.status(200).json( { message: "Assignation rendu avec succès" , updated: true} ) ;
+        return res.status(200).json( { message: "Assignation rendue avec succès" , updated: true} ) ;
     } 
     catch( error )
     {
         return res.status(400).json( error ) ; 
     }
 }
+
 
 module.exports = { 
     get_note_by_assignment , 

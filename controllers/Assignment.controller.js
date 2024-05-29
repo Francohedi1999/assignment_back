@@ -21,7 +21,8 @@ create_assignment = async ( req , res ) =>
             description : req.body.description , 
             niveau : req.body.niveau ,
             dl: req.body.dl ,
-            ens_id:  req.body.ens_id
+            ens_id:  req.body.ens_id ,
+            canceled: false
         } ) ;
     
         const promises = etudiants.map( etudiant => 
@@ -45,6 +46,13 @@ get_all_assignment = async ( req , res ) =>
     try
     {
         let aggregate_query = Assignment_Model.aggregate() ;
+
+        const filtre_canceled = req.query.filtre_canceled;
+        if (filtre_canceled !== 'undefined') 
+        {
+            const canceled = filtre_canceled === 'true';
+            aggregate_query.match({ canceled: canceled });
+        }
 
         const id_enseignant = req.query.id_enseignant ;
         if( id_enseignant )
@@ -84,12 +92,32 @@ get_all_assignment = async ( req , res ) =>
 } ;
 
 
+delete_assignment = async (req , res )  =>
+{
+    try
+    { 
+        const id_assignment = req.params.id ;
+        const assignment = await Assignment_Model.findById( id_assignment ) ;
+        if( !assignment )
+        {
+            return res.status(200).json( { message: "Assignation non trouvée" , updated: false } ) ;
+        }
+        const assignment_update = { canceled : true } ;
+        await Assignment_Model.findOneAndUpdate( { _id: id_assignment } , assignment_update , { new: true } );                    
+        return res.status(200).json( { message: "Assignation supprimée avec succès" , updated: true} ) ;
+    } 
+    catch( error )
+    {
+        return res.status(400).json( error ) ; 
+    }
+}
+
 get_assignement_by_id = async ( req , res ) =>
 {
     try
     {  
         const id_assignement = req.params.id ;
-        const assignement = await Assignment_Model.findById( id_assignement ) ;
+        const assignement = await Assignment_Model.findOne( { _id: id_assignement , canceled: false } ) ;
                 
         return res.status(200).json( assignement ) ;
     } 
@@ -101,5 +129,6 @@ get_assignement_by_id = async ( req , res ) =>
 
 
 module.exports = {  create_assignment ,
+                    delete_assignment ,
                     get_all_assignment , 
                     get_assignement_by_id }
