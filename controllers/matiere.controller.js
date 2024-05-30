@@ -163,7 +163,7 @@ exports.getMatiereById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const matiere = await Matiere.findOne({ id: id, deleted: false });
+        const matiere = await Matiere.findOne({ id: id });
 
 
         if (!matiere) {
