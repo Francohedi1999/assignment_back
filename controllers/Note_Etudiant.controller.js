@@ -78,8 +78,10 @@ ajout_note_etu = async (req , res ) =>
         {
             return res.status(200).json( { message: "Note non trouvée" , updated: false } ) ;
         }
-
-        const note_update = { note : req.body.note , noted : true  } ;
+        
+        const _note = req.body.note;
+        const remarque_ = req.body.remarque;
+        const note_update = { note : _note , noted : true , remarque: remarque_  } ;
         await Note_Etudiant_model.findOneAndUpdate( { _id: id_note } , note_update , { new: true } );                    
         return res.status(200).json( { message: "Note ajoutée avec succès" , updated: true} ) ;
     } 

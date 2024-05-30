@@ -29,6 +29,7 @@ create_assignment = async ( req , res ) =>
             Note_Etudiant_model.create( {
                                             assignment_id : assignment._id ,
                                             etudiant_id : etudiant._id ,
+                                            remarque : "" ,
                                             note : 0 ,
                                             rendu : false ,
                                             noted : false 
