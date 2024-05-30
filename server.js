@@ -13,7 +13,7 @@ const Note_Etu_Routes = require("./routes/Note_Etu.route");
 const {create_admin} = require("./config/Config") ;
 
 const file_upload = require('express-fileupload');
-const port = process.env.PORT ;
+let port = process.env.PORT || 8010 ;
 const path = require("path") ;
 
 connection_mongoDB() ;
