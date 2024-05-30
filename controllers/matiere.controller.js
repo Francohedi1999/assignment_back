@@ -92,7 +92,7 @@ exports.updateMatiere = [
     async (req, res) => {
         try {
             const { id } = req.params; // ID Matiere
-            const { nom, idProf } = req.body;
+            const { nom, idProf,deleted,deletedAt } = req.body;
             const errors = [];
             // Verification du champ nom
             if (!nom || !nom.trim()) {
@@ -145,6 +145,12 @@ exports.updateMatiere = [
                 matiereResult.imageMatiere = file_url;
                 matiereResult.idProf = idProf;
 
+                // Verifier si on reçoit un champ deleted
+                if (deleted !== undefined) {
+                    matiereResult.deleted = deleted; // Mettre à jour deleted
+                    matiereResult.deletedAt = deletedAt; // Mettre à jour deletedAt
+                }
+
                 // Save modifications
                 const matiereMiseAJour = await matiereResult.save();
                 return res.status(200).json({
@@ -163,7 +169,7 @@ exports.getMatiereById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const matiere = await Matiere.findOne({ id: id, deleted: false });
+        const matiere = await Matiere.findOne({id: id});
 
 
         if (!matiere) {
@@ -254,6 +260,20 @@ exports.getAllMatieres = async (req, res) => {
 
         return res.status(200).json({
             message: "Liste des matières récupérée avec succès!",
+            data: matieres
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get Matiere supprimée
+exports.getMatieresSupprimees = async (req, res) => {
+    try {
+        const matieres = await Matiere.find({ deleted: true });
+
+        return res.status(200).json({
+            message: "Liste des matières supprimées récupérée avec succès!",
             data: matieres
         });
     } catch (error) {
