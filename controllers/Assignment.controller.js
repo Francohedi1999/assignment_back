@@ -29,6 +29,7 @@ create_assignment = async ( req , res ) =>
             Note_Etudiant_model.create( {
                                             assignment_id : assignment._id ,
                                             etudiant_id : etudiant._id ,
+                                            remarque : "" ,
                                             note : 0 ,
                                             rendu : false ,
                                             noted : false 
@@ -52,6 +53,12 @@ get_all_assignment = async ( req , res ) =>
         {
             const canceled = filtre_canceled === 'true';
             aggregate_query.match({ canceled: canceled });
+        }
+
+        const filtre_desc = req.query.filtre_desc ;
+        if( filtre_desc )
+        {     
+            aggregate_query.match({ description: filtre_desc });
         }
 
         const id_enseignant = req.query.id_enseignant ;
@@ -80,7 +87,11 @@ get_all_assignment = async ( req , res ) =>
             } 
             else 
             {
-                
+                console.log("data")
+                console.log("data")
+                console.log(data)
+                console.log("data")
+                console.log("data")
                 return res.status(200).json( data ) ;
             }
         });

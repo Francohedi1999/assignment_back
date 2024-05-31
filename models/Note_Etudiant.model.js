@@ -5,6 +5,7 @@ const note_etudiant_model = mongoose.Schema({
 
     assignment_id : { type: String , required: true } ,
     etudiant_id : { type: String , required: true } ,
+    remarque : { type: String , required: false } ,
     note : { type: Number , required: true  } ,
     rendu : { type: Boolean , required: false } ,
     noted : { type: Boolean , required: false } ,

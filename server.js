@@ -1,6 +1,6 @@
 require("dotenv").config() ;
 
-const { connection_mongoDB } = require("./config/mongoDB") ;
+const { connection_mongoDB } = require("./config/MongoDB") ;
 const express = require("express") ;
 const cors = require("cors") ;
 const app = express() ;
@@ -13,7 +13,8 @@ const Note_Etu_Routes = require("./routes/Note_Etu.route");
 const {create_admin} = require("./config/Config") ;
 
 const file_upload = require('express-fileupload');
-const port = process.env.PORT ;
+// let port = process.env.PORT || 8010 ;
+let port = process.env.PORT || 3000 ;
 const path = require("path") ;
 
 connection_mongoDB() ;
