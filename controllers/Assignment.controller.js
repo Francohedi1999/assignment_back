@@ -55,10 +55,15 @@ get_all_assignment = async ( req , res ) =>
             aggregate_query.match({ canceled: canceled });
         }
 
+        const filtre_desc = req.query.filtre_desc ;
+        if( filtre_desc )
+        {     
+            aggregate_query.match({ description: filtre_desc });
+        }
+
         const id_enseignant = req.query.id_enseignant ;
         if( id_enseignant )
         {     
-            console.log( id_enseignant )
             aggregate_query.match({ ens_id: id_enseignant });
         }
 
