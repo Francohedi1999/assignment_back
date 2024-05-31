@@ -58,6 +58,7 @@ get_all_assignment = async ( req , res ) =>
         const id_enseignant = req.query.id_enseignant ;
         if( id_enseignant )
         {     
+            console.log( id_enseignant )
             aggregate_query.match({ ens_id: id_enseignant });
         }
 
@@ -81,7 +82,11 @@ get_all_assignment = async ( req , res ) =>
             } 
             else 
             {
-                
+                console.log("data")
+                console.log("data")
+                console.log(data)
+                console.log("data")
+                console.log("data")
                 return res.status(200).json( data ) ;
             }
         });

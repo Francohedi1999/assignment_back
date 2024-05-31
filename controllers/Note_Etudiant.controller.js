@@ -59,7 +59,7 @@ get_note_by_assignment_etu = async ( req , res ) =>
     { 
         const assignment_id = req.params.assignment_id ;
         const etudiant_id = req.params.etudiant_id ;
-        const notes = await Note_Etudiant_model.findOne( { assignment_id : assignment_id , etudiant_id : etudiant_id } ) ;
+        const notes = await Note_Etudiant_model.findOne( {  etudiant_id : etudiant_id  , assignment_id : assignment_id } ) ;
         return res.status(200).json( notes ) ;
     } 
     catch( error )

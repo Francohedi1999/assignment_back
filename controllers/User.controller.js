@@ -8,6 +8,608 @@ const Assignment_Model = require("../models/Assignment.model") ;
 const Note_Etudiant_model = require("../models/Note_Etudiant.model") ;
 const BASE_URL = process.env.BASE_URL ; 
 
+const users = [
+    {
+      "nom": "Phyllys",
+      "prenom": "Linebarger",
+      "email": "plinebarger0@redcross.org",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student1.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L2 Design"
+    },
+    {
+      "nom": "Georgeta",
+      "prenom": "Platfoot",
+      "email": "gplatfoot1@disqus.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student2.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Design"
+    },
+    {
+      "nom": "Harlene",
+      "prenom": "Buffey",
+      "email": "hbuffey2@japanpost.jp",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student3.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Mathématiques"
+    },
+    {
+      "nom": "Elisha",
+      "prenom": "Merrin",
+      "email": "emerrin3@aboutads.info",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student4.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M2 BIHAR"
+    },
+    {
+      "nom": "Vania",
+      "prenom": "Peacop",
+      "email": "vpeacop4@deviantart.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student5.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M2 BIHAR"
+    },
+    {
+      "nom": "Binni",
+      "prenom": "Magor",
+      "email": "bmagor5@rediff.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student6.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Design"
+    },
+    {
+      "nom": "Nicholle",
+      "prenom": "Carson",
+      "email": "ncarson6@twitter.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student7.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Informatique"
+    },
+    {
+      "nom": "Jordanna",
+      "prenom": "Kleinberer",
+      "email": "jkleinberer7@reverbnation.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student8.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M1 Informatique"
+    },
+    {
+      "nom": "Annamaria",
+      "prenom": "Ferrao",
+      "email": "aferrao8@buzzfeed.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student9.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L3 Informatique"
+    },
+    {
+      "nom": "Laraine",
+      "prenom": "Risborough",
+      "email": "lrisborough9@ucla.edu",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student10.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Informatique"
+    },
+    {
+      "nom": "Lucilia",
+      "prenom": "Bursnall",
+      "email": "lbursnalla@etsy.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student11.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Informatique"
+    },
+    {
+      "nom": "Chery",
+      "prenom": "Luckett",
+      "email": "cluckettb@intel.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student12.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L3 Informatique"
+    },
+    {
+      "nom": "Rosana",
+      "prenom": "Cyster",
+      "email": "rcysterc@state.tx.us",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student13.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M1 Informatique"
+    },
+    {
+      "nom": "Bebe",
+      "prenom": "Bodycomb",
+      "email": "bbodycombd@mac.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student14.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Informatique"
+    },
+    {
+      "nom": "Keeley",
+      "prenom": "Fruish",
+      "email": "kfruishe@de.vu",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student15.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L3 Informatique"
+    },
+    {
+      "nom": "Jami",
+      "prenom": "Jillions",
+      "email": "jjillionsf@wikipedia.org",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student16.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L3 Informatique"
+    },
+    {
+      "nom": "Ingrid",
+      "prenom": "Timmins",
+      "email": "itimminsg@bbb.org",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student17.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M1 Informatique"
+    },
+    {
+      "nom": "Rozella",
+      "prenom": "Dupre",
+      "email": "rdupreh@live.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student18.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L2 Design"
+    },
+    {
+      "nom": "Nonie",
+      "prenom": "Rey",
+      "email": "nreyi@toplist.cz",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student19.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Mathématiques"
+    },
+    {
+      "nom": "Sofia",
+      "prenom": "Cecchi",
+      "email": "scecchij@issuu.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student20.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L2 Informatique"
+    },
+    {
+      "nom": "Ebonee",
+      "prenom": "Carff",
+      "email": "ecarffk@toplist.cz",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student1.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M2 BIHAR"
+    },
+    {
+      "nom": "Garland",
+      "prenom": "Wintersgill",
+      "email": "gwintersgilll@eepurl.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student2.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L2 Design"
+    },
+    {
+      "nom": "Fifi",
+      "prenom": "Ferre",
+      "email": "fferrem@discuz.net",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student3.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M2 MBDS"
+    },
+    {
+      "nom": "Ibby",
+      "prenom": "O'Scollain",
+      "email": "ioscollainn@discuz.net",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student4.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Design"
+    },
+    {
+      "nom": "Petronilla",
+      "prenom": "Craigheid",
+      "email": "pcraigheido@myspace.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student5.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L3 Informatique"
+    },
+    {
+      "nom": "Gertruda",
+      "prenom": "Battle",
+      "email": "gbattlep@webnode.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student6.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Mathématiques"
+    },
+    {
+      "nom": "Dorise",
+      "prenom": "Mostyn",
+      "email": "dmostynq@jiathis.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student7.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Informatique"
+    },
+    {
+      "nom": "Lois",
+      "prenom": "Batram",
+      "email": "lbatramr@csmonitor.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student8.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M2 MBDS"
+    },
+    {
+      "nom": "Cleo",
+      "prenom": "Ollet",
+      "email": "collets@deviantart.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student9.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Informatique"
+    },
+    {
+      "nom": "Dorthea",
+      "prenom": "Bussy",
+      "email": "dbussyt@multiply.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student10.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Informatique"
+    },
+    {
+      "nom": "Harmonia",
+      "prenom": "Brunetti",
+      "email": "hbrunettiu@alexa.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student11.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L2 Design"
+    },
+    {
+      "nom": "Vittoria",
+      "prenom": "Waything",
+      "email": "vwaythingv@wufoo.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student12.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M2 BIHAR"
+    },
+    {
+      "nom": "Yoshiko",
+      "prenom": "Poulsom",
+      "email": "ypoulsomw@arizona.edu",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student13.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M1 Informatique"
+    },
+    {
+      "nom": "Shelby",
+      "prenom": "Binham",
+      "email": "sbinhamx@free.fr",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student14.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L2 Informatique"
+    },
+    {
+      "nom": "Cristie",
+      "prenom": "McKerton",
+      "email": "cmckertony@arstechnica.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student15.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M2 MBDS"
+    },
+    {
+      "nom": "Bebe",
+      "prenom": "Claypoole",
+      "email": "bclaypoolez@rediff.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student16.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M1 Informatique"
+    },
+    {
+      "nom": "Candida",
+      "prenom": "Stubbington",
+      "email": "cstubbington10@delicious.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student17.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M2 MBDS"
+    },
+    {
+      "nom": "Lane",
+      "prenom": "Harme",
+      "email": "lharme11@arizona.edu",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student18.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Mathématiques"
+    },
+    {
+      "nom": "Elisabetta",
+      "prenom": "Kaspar",
+      "email": "ekaspar12@google.es",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student19.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L2 Design"
+    },
+    {
+      "nom": "Reine",
+      "prenom": "Tullett",
+      "email": "rtullett13@wikimedia.org",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student20.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L3 Informatique"
+    },
+    {
+      "nom": "Marian",
+      "prenom": "Ozanne",
+      "email": "mozanne14@businessweek.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student1.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Mathématiques"
+    },
+    {
+      "nom": "Gabie",
+      "prenom": "Ridgley",
+      "email": "gridgley15@seattletimes.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student2.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M1 Informatique"
+    },
+    {
+      "nom": "Anetta",
+      "prenom": "Slogrove",
+      "email": "aslogrove16@forbes.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student3.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L3 Informatique"
+    },
+    {
+      "nom": "Edwina",
+      "prenom": "Woolam",
+      "email": "ewoolam17@answers.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student4.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Design"
+    },
+    {
+      "nom": "Valina",
+      "prenom": "Gotcher",
+      "email": "vgotcher18@yelp.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student5.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M1 Informatique"
+    },
+    {
+      "nom": "Barbee",
+      "prenom": "Ofen",
+      "email": "bofen19@lulu.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student6.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M2 MBDS"
+    },
+    {
+      "nom": "Pru",
+      "prenom": "Cornhill",
+      "email": "pcornhill1a@census.gov",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student7.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M2 BIHAR"
+    },
+    {
+      "nom": "Mufinella",
+      "prenom": "Edel",
+      "email": "medel1b@china.com.cn",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student8.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Mathématiques"
+    },
+    {
+      "nom": "Jo ann",
+      "prenom": "Camamile",
+      "email": "jcamamile1c@list-manage.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student9.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Informatique"
+    },
+    {
+      "nom": "Saidee",
+      "prenom": "Seyffert",
+      "email": "sseyffert1d@linkedin.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student10.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L3 Informatique"
+    },
+    {
+      "nom": "Shanta",
+      "prenom": "Senior",
+      "email": "ssenior1e@deliciousdays.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student11.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M2 BIHAR"
+    },
+    {
+      "nom": "Krystyna",
+      "prenom": "Ulyet",
+      "email": "kulyet1f@imgur.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student12.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L2 Design"
+    },
+    {
+      "nom": "Shanta",
+      "prenom": "Eastwood",
+      "email": "seastwood1g@reddit.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student13.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Informatique"
+    },
+    {
+      "nom": "Hinda",
+      "prenom": "Greenham",
+      "email": "hgreenham1h@gravatar.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student14.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M1 Informatique"
+    },
+    {
+      "nom": "Leora",
+      "prenom": "Philbrick",
+      "email": "lphilbrick1i@biglobe.ne.jp",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student15.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M1 Informatique"
+    },
+    {
+      "nom": "Darcey",
+      "prenom": "Molfino",
+      "email": "dmolfino1j@tamu.edu",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student16.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L1 Design"
+    },
+    {
+      "nom": "Teirtza",
+      "prenom": "O'Coskerry",
+      "email": "tocoskerry1k@arizona.edu",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student17.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L2 Informatique"
+    },
+    {
+      "nom": "Aliza",
+      "prenom": "Warden",
+      "email": "awarden1l@nature.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student18.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M1 Informatique"
+    },
+    {
+      "nom": "Randie",
+      "prenom": "Steptow",
+      "email": "rsteptow1m@tripadvisor.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student19.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "L2 Informatique"
+    },
+    {
+      "nom": "Cathrin",
+      "prenom": "Jerrim",
+      "email": "cjerrim1n@patch.com",
+      "password": "$2b$10$6EBVVrjV.zDxljKPRMsNeO99PENZNCnyvMEqNqu6la0VlaNLTPuy.",
+      "img_url": "http://localhost:3000/images_users/student20.JPG",
+      "role": "Etudiant",
+      "deleted": false,
+      "niveau": "M2 BIHAR"
+    }
+  ]
 
 create_user = async ( req , res ) => 
 {
